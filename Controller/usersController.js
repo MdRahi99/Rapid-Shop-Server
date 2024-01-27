@@ -5,6 +5,17 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
+router.get('/users', async (req, res) => {
+    try {
+        const users = await Users.find();
+
+        res.status(200).json({ users });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 router.get('/user', async (req, res) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
@@ -25,7 +36,7 @@ router.get('/user', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-    const { phoneNumber, password } = req.body;
+    const { name, phoneNumber, password } = req.body;
 
     try {
         const existingUser = await Users.findOne({ phoneNumber });
@@ -35,7 +46,7 @@ router.post('/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new Users({ phoneNumber, password: hashedPassword });
+        const newUser = new Users({ name, phoneNumber, password: hashedPassword });
         await newUser.save();
 
         res.status(201).json({ message: 'Registration successful' });
