@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import Users from '../Models/Users.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -32,6 +33,27 @@ router.get('/user', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(401).json({ message: 'Unauthorized' });
+    }
+});
+
+router.delete('/users/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        if (!mongoose.isValidObjectId(userId)) {
+            return res.status(400).json({ success: false, message: 'Invalid User ID.' });
+        }
+
+        const deletedUser = await Users.findByIdAndDelete(userId);
+
+        if (!deletedUser) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+
+        res.json({ success: true, message: 'User deleted successfully.', data: deletedUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });
 
