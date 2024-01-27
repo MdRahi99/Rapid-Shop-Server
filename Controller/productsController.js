@@ -35,11 +35,11 @@ router.get('/products/:productId', async (req, res) => {
 
 // Route to add a new product
 router.post('/products', async (req, res) => {
-    const { Name, Price, ImageUrl, Description, Category, Rating } = req.body;
+    const { Name, Price, ImageUrl, Description, Rating } = req.body;
 
     try {
         // Validate request body
-        if (!Name || typeof Price !== 'number' || !ImageUrl || !Description || !Category || typeof Rating !== 'number') {
+        if (!Name || typeof Price !== 'number' || !ImageUrl || !Description || typeof Rating !== 'number') {
             return res.status(400).json({ success: false, message: 'Invalid request body. Make sure all required fields are provided and have correct data types.' });
         }
 
@@ -48,7 +48,6 @@ router.post('/products', async (req, res) => {
             Price,
             ImageUrl,
             Description,
-            Category,
             Rating
         });
 
