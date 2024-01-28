@@ -1,5 +1,6 @@
 import express from 'express';
 import Orders from '../Models/Orders.js';
+import Cart from '../Models/Cart.js';
 
 const router = express.Router();
 
@@ -25,6 +26,8 @@ router.post('/orders', async (req, res) => {
         });
 
         const savedOrder = await newOrder.save();
+
+        await Cart.deleteMany({});
 
         res.status(201).json(savedOrder);
     } catch (error) {
