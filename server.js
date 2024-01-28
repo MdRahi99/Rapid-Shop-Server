@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import usersController from './Controller/usersController.js';
 import productsController from './Controller/productsController.js';
 import cartController from './Controller/cartController.js';
+import ordersController from './Controller/ordersController.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,7 @@ db.once('open', () => {
 app.use('/api', usersController);
 app.use('/api', productsController);
 app.use('/api', cartController);
+app.use('/api', ordersController);
 
 app.get('/', (req, res) => {
   try {
